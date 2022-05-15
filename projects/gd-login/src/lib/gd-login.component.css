@@ -1,0 +1,31 @@
+.login-button
+{
+    margin  : 0 0 0 7px;
+    float   : right;
+    height  : 24px;
+    width   : 77px;
+    color   : rgb(100, 100, 100);
+    border  : 1px solid #bbb;
+    border-radius: 3px;
+    cursor  : default;
+}
+
+.login-button:hover
+{
+    background : #ccc;
+    cursor     : pointer;
+}
+
+/***********/
+
+input.stringInput
+{
+    text-align:left;
+    background: rgb(245, 245, 245);
+    height    : 24px;
+    width     : 100%;
+    border    : 1px solid #bbb;
+    font-style:italic;
+    border-radius:3px;
+    padding   : 0 0 0 4px
+}
