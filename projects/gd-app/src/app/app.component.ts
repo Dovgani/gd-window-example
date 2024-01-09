@@ -1,10 +1,9 @@
 import { Component          } from '@angular/core';
-import { ViewChild          } from '@angular/core';
 import { LocationStrategy   } from '@angular/common';
 import { GDWindowService    } from 'gd-window';
 import { GDWindowComponent  } from 'gd-window';
 import { IGDWindowConfig    } from 'gd-window';
-import { GDLoginComponent   } from '../../../gd-login/src/lib/gd-login.component';
+import { GDLoginComponent   } from 'projects/gd-login/src/lib/gd-login.component';
 
 @Component({
   selector: 'app-root',
@@ -13,85 +12,95 @@ import { GDLoginComponent   } from '../../../gd-login/src/lib/gd-login.component
 })
 export class AppComponent
 {
-    title = 'gd-app';
-
-    @ViewChild('myWindow') myWindow : GDWindowComponent;
-
-    public myWindowConfig : IGDWindowConfig = 
+    public gdWindowDefualt : IGDWindowConfig = 
     {
-        left   : 100,
-        top    : 100,
-        width  : 500,
-        height : 250,
-        title  : 'GD window (default)',
-        icon   : './assets/icons/Window.png'
+        left          : 100,
+        top           : 100,
+        width         : 500,
+        height        : 250,
+        title         : 'GD window (default)',
+        icon          : './assets/icons/Window.png',
+        isIconVisible : true,
+        isIconImage   : true
     };  
 
-    constructor( private windowService: GDWindowService, private locationStrategy: LocationStrategy )
+    constructor( private windowService: GDWindowService, 
+                 private locationStrategy: LocationStrategy )
     {
     }
 
     public  ngOnInit() : void
     {
-        var myWindowConfig_dynamic : IGDWindowConfig = 
+        let gdWindowDynamic : IGDWindowConfig = 
         {
-            left   : 260,
-            top    : 260,
-            width  : 500,
-            height : 250,
-            title  : 'GD window (dynamic)',
-            icon   : './assets/icons/Window.png',
+            left        : 260,
+            top         : 260,
+            width       : 500,
+            height      : 250,
+            title       : 'GD window (dynamic)',
+            icon        : './assets/icons/Window.png',
+            isIconVisible : true,
+            isIconImage   : true
         };  
     
         this.windowService.open( null, this.whenDynamicIsReady.bind(this), 
         { 
-           windowConfig : myWindowConfig_dynamic, 
+           windowConfig : gdWindowDynamic, 
            childData    : undefined 
         });
 
-        var x = 840;
-        var y = 100;
-        var w = 800;
-        var h = 400;
+        let x = 840;
+        let y = 100;
+        let w = 800;
+        let h = 400;
 
-        var modalPrentWindowConfig : IGDWindowConfig = 
+        let gdWindowParent : IGDWindowConfig = 
         {
-            left   : x,
-            top    : y,
-            width  : w,
-            height : h,
-            title  : 'GD window (modal parent)',
-            icon   : './assets/icons/Window.png',
+            left          : x,
+            top           : y,
+            width         : w,
+            height        : h,
+            title         : 'GD window (modal parent)',
+            icon          : './assets/icons/Window.png',
+            isIconVisible : true,
+            isIconImage   : true
         };  
-    
-        this.windowService.open( null, this.whenDynamicIsReady.bind(this), 
+
+        let parent = this.windowService.open( null, this.whenDynamicIsReady.bind(this), 
         { 
-           windowConfig : modalPrentWindowConfig, 
+           windowConfig : gdWindowParent, 
            childData    : undefined 
         });
 
-        const modalWindowConfig : IGDWindowConfig = 
+        let wLogin = 270;
+        let hLogin = 168;
+
+        // modal should have parent ID
+        let gdLoginWindow : IGDWindowConfig = 
         {
-            modalParentRect           : { left : x-1, top : y-1, width : w+2, height : h+2 },
+            parentID                  : parent.ID,
+            modalParentRect           : { left : x-1, top : y-1, width : w+3, height : h+3 },
             isModal                   : true,
             childMakesDecisionToClose : true,
-            left                      : x + (w - 270)/2,
-            top                       : y + (h - 168)/2,
+            left                      : x + (w - wLogin)/2,
+            top                       : y + (h - hLogin)/2,
             z                         : 45,
-            width                     : 270,
-            height                    : 168,
+            width                     : wLogin,
+            height                    : hLogin,
             title                     : 'Login',
             footer                    : '',
             icon                      : './assets/icons/User.png',
+            isIconVisible             : true,
+            isIconImage               : true,
             ok                        : 'Login',
             cancel                    : 'Cancel',
             whenOKClick               : (data:any) => {},
             whenCancelClick           : (data:any) => {}
         }
 
-        this.windowService.open( GDLoginComponent, this.whenDynamicIsReady.bind(this), 
+        this.windowService.open( GDLoginComponent, this.whenLoginIsReady.bind(this), 
         { 
-           windowConfig : modalWindowConfig, 
+           windowConfig : gdLoginWindow, 
            childData    : undefined 
         });
     }
@@ -99,8 +108,8 @@ export class AppComponent
     public  ngAfterViewInit() : void
     {
         // dissable back navigation button
-                                                  history.pushState( null, null, location.href );
-        this.locationStrategy.onPopState( () => { history.pushState( null, null, location.href ); });
+                                                  history.pushState( null, '', location.href );
+        this.locationStrategy.onPopState( () => { history.pushState( null, '', location.href ); });
 
         // disable browser contextmenu
         document.addEventListener( 'contextmenu',  (event : any) => event.preventDefault() );  
@@ -109,6 +118,30 @@ export class AppComponent
 
     private whenDynamicIsReady( window : GDWindowComponent, child : any )   
     {
-        // add your code
+        let divNode = document.createElement('div');
+            divNode.style.margin = '4px 10px'; 
+            divNode.innerHTML =       
+            `<br>
+            <b>Window exapmple created dynamically in code</b><br>
+            <br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>
+            Some plain test or html or Component<br>`;
+
+        (child.el.nativeElement as HTMLElement).appendChild(divNode);
+    }    
+
+    private whenLoginIsReady( window : GDWindowComponent, child : any )   
+    {
     }    
 }

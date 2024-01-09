@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": false
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -23,9 +20,11 @@
             "outputPath": "dist/gd-app",
             "index": "projects/gd-app/src/index.html",
             "main": "projects/gd-app/src/main.ts",
-            "polyfills": "projects/gd-app/src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "projects/gd-app/tsconfig.app.json",
-            "aot": true,
+            "inlineStyleLanguage": "scss",
             "assets": [
               "projects/gd-app/src/favicon.ico",
               "projects/gd-app/src/assets"
@@ -37,44 +36,42 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/gd-app/src/environments/environment.ts",
-                  "with": "projects/gd-app/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
-              ]
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "gd-app:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "gd-app:build:production"
+            },
+            "development": {
+              "browserTarget": "gd-app:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -85,10 +82,12 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/gd-app/src/test.ts",
-            "polyfills": "projects/gd-app/src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "projects/gd-app/tsconfig.spec.json",
-            "karmaConfig": "projects/gd-app/karma.conf.js",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "projects/gd-app/src/favicon.ico",
               "projects/gd-app/src/assets"
@@ -98,34 +97,44 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        }
+      }
+    },
+    "gd-login": {
+      "projectType": "library",
+      "root": "projects/gd-login",
+      "sourceRoot": "projects/gd-login/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": [
-              "projects/gd-app/tsconfig.app.json",
-              "projects/gd-app/tsconfig.spec.json",
-              "projects/gd-app/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/gd-app/e2e/protractor.conf.js",
-            "devServerTarget": "gd-app:serve"
+            "project": "projects/gd-login/ng-package.json"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "gd-app:serve:production"
+              "tsConfig": "projects/gd-login/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gd-login/tsconfig.lib.json"
             }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/gd-login/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "gd-app"
+  "cli": {
+    "analytics": "36c6b16f-81a8-4366-aef5-38ce27db73b9"
+  }
 }

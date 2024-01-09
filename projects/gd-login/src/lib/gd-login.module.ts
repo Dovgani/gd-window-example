@@ -9,7 +9,7 @@ import { GDLoginComponent } from './gd-login.component';
   exports:      [GDLoginComponent],
   imports:      [
     BrowserModule,
-    FormsModule,
+    FormsModule
   ]
 })
 export class GDLoginModule {}
